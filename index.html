@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanishk Thamman - Cybersecurity & AI Specialist</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <style>
+                
+        :root {
+            --bg-color: #0a0a0a;
+            --text-color: #f0f0f0;
+            --primary-color: #b19cd9;
+            --secondary-color: #bae1ff;
+            --accent-color: #ffb3ba;
+        }
+
+        body, html { 
+            margin: 0; 
+            padding: 0;
+            height: 100%;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Arial', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .content {
+            position: relative;
+        }
+
+        .hero {
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #background-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        .name-overlay {
+            text-align: center;
+            z-index: 2;
+            background: rgba(10, 10, 10, 0.7);
+            padding: 40px 60px;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(177, 156, 217, 0.3);
+        }
+
+        .name-overlay h1 { 
+            font-size: 54px; 
+            margin: 0; 
+            letter-spacing: 6px;
+            color: var(--primary-color);
+            text-shadow: 0 0 15px rgba(177, 156, 217, 0.5);
+        }
+
+        .name-overlay p { 
+            font-size: 20px; 
+            margin: 15px 0 0; 
+            opacity: 0.8;
+            letter-spacing: 3px;
+            color: var(--secondary-color);
+        }
+
+        .section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 80px 40px;
+            box-sizing: border-box;
+        }
+
+        .section-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            font-size: 42px;
+            margin-bottom: 50px;
+            text-align: center;
+            color: var(--primary-color);
+            position: relative;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background-color: var(--accent-color);
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+
+        .experience-item, .education-item, .certification-item, .project-item {
+            background-color: rgba(177, 156, 217, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            height: 200px;
+        }
+
+        .experience-item:hover, .education-item:hover, .certification-item:hover, .project-item:hover {
+            height: auto;
+            min-height: 200px;
+        }
+
+        .item-details {
+            opacity: 0;
+            visibility: hidden;
+            display: none;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            padding: 30px;
+            background-color: rgba(177, 156, 217, 0.05);
+            overflow-y: auto;
+        }
+
+        .experience-item:hover .item-details, 
+        .education-item:hover .item-details, 
+        .certification-item:hover .item-details, 
+        .project-item:hover .item-details {
+            opacity: 1;
+            visibility: visible;
+            position: static;
+        }
+
+        .experience-item h3, .education-item h3, .certification-item h3, .project-item h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .item-details ul {
+            padding-left: 20px;
+            margin-top: 10px;
+        }
+
+        .item-details p {
+            margin-top: 0;
+        }
+
+        .item-link {
+            display: inline-block;
+            padding: 8px 16px;
+            margin-top: 15px;
+            background-color: var(--primary-color);
+            color: var(--bg-color);
+            text-decoration: none;
+            border-radius: 20px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            border: 2px solid var(--primary-color);
+        }
+        .item-details.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .item-link:hover {
+            background-color: var(--bg-color);
+            color: var(--primary-color);
+        }
+
+        .item-link + .item-link {
+            margin-left: 10px;
+        }
+
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .skills-list li {
+            background-color: rgba(177, 156, 217, 0.1);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .skills-list li:hover {
+            background-color: rgba(177, 156, 217, 0.2);
+            transform: translateY(-3px);
+        }
+        .file-popup {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .popup-content {
+            background-color: rgba(143, 120, 185, 0.3);
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            height: 80%;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .close-popup {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close-popup:hover,
+        .close-popup:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        #fileViewer {
+            width: 100%;
+            height: calc(100% - 40px);
+            border: none;
+        }
+
+
+        @media (max-width: 768px) {
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+
+            .name-overlay h1 {
+                font-size: 40px;
+            }
+
+            .name-overlay p {
+                font-size: 16px;
+            }
+
+            .section {
+                padding: 60px 20px;
+            }
+
+            h2 {
+                font-size: 36px;
+            }
+        }
+        #background-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .section {
+            transform: perspective(1000px) rotateX(5deg);
+            transition: transform 0.3s ease;
+        }
+
+        .section:hover {
+            transform: perspective(1000px) rotateX(0deg) translateZ(20px);
+        }
+
+        .certification-item, .project-item {
+            transition: transform 0.3s ease;
+        }
+
+        .certification-item:hover, .project-item:hover {
+            transform: scale(1.05) rotateY(5deg);
+        }
+        #background-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .section {
+            transform: perspective(1000px) rotateX(5deg);
+            transition: transform 0.3s ease;
+        }
+
+        .section:hover {
+            transform: perspective(1000px) rotateX(0deg) translateZ(20px);
+        }
+
+        .certification-item, .project-item {
+            position: relative;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .item-front, .item-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+        }
+
+        .item-back {
+            transform: rotateY(180deg);
+            overflow-y: auto;
+            max-height: 100%;
+        }
+
+        .certification-item.flipped, .project-item.flipped {
+            transform: rotateY(180deg);
+        }
+        .view-all-certs {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #141414e8;/* Changed to a cool blue color */
+    color: white;
+    text-decoration: none;
+    border-radius: 30px;
+    font-weight: bold;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    position: relative;
+    overflow: hidden;
+    border: 2px solid transparent;
+    border-color: #7986CB;
+    
+}
+
+.view-all-certs:hover {
+    background-color: transparent;
+    color: #7986CB;
+    border-color: #7986CB;
+}
+
+.view-all-certs:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.button-icon {
+    display: inline-block;
+    margin-left: 8px;
+    transition: transform 0.3s ease;
+}
+
+.view-all-certs:hover .button-icon {
+    transform: translateX(4px);
+}
+
+.view-all-certs::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    transform: rotate(45deg);
+    transition: all 0.3s ease;
+}
+
+.view-all-certs:hover::before {
+    left: 100%;
+}
+
+    </style>
+</head>
+<body>
+    <canvas id="background-canvas"></canvas>
+    <div class="content">
+        <div class="hero">
+            <canvas id="background-canvas"></canvas>
+            <div class="name-overlay">
+                <h1>KANISHK THAMMAN</h1>
+                <p>Aspiring Cybersecurity & AI Specialist</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-content">
+                <h2>Experience</h2>
+                <div class="grid-container">
+                    <div class="experience-item">
+                        <h3>Computer SCI Teacher - Code Ninjas</h3>
+                        <p>Jul 2023 - May 2024 · Frisco, Texas, United States · On-site</p>
+                        <div class="item-details">
+                            <p>Delivered middle school computer science curriculum, focusing on fundamental concepts such as algorithms and coding principles. Instructed participants in Roblox fundamentals during summer camps, guiding them through game development, scripting, and collaborative projects. Adapted teaching style to cater to diverse learning styles, providing individualized support within the framework of the given curriculum.</p>
+                        </div>
+                    </div>
+                    <div class="experience-item">
+                        <h3>Python Developer - Visard Org</h3>
+                        <p>May 2022 - Jun 2022 · Internship</p>
+                        <div class="item-details">
+                            <p>Developed innovative UI/UX designs for e-commerce websites using Python. Collaborated closely with stakeholders to implement tailored solutions. Participated in team meetings to discuss project requirements and progress. Conducted code reviews and provided constructive feedback to team members.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Certificates Section -->
+        <section id="certificates" class="section parallax" data-speed="0.2">
+            <div class="section-content">
+                <h2>Certificates</h2>
+                <div class="grid-container">
+                    <div class="certification-item">
+                        <h3>Cisco Certified Support Technician Cybersecurity</h3>
+                        <div class="item-details">
+                            <ul>
+                                <li>Studied and passed the Cisco Certified Support Technician Cybersecurity exam.</li>
+                                <br>
+                                <li>Gained comprehensive knowledge of cybersecurity principles and practices.</li>
+                                <br>
+                                <li>Learned to identify and mitigate various types of cyber threats.</li>
+                                <br>
+                                <li>Developed technical support skills specific to cybersecurity.</li>
+                                <br>
+                                <li>Completed practical labs and simulations to apply cybersecurity concepts.</li>
+                                <br>
+                                <li>Participated in online forums and study groups to enhance understanding.</li>
+                            </ul>
+                            <a href="#" class="item-link" data-file="assets/Certificates/Cisco Certified Support Technician Cybersecurity.pdf">Certification Link</a>
+                        </div>
+                    </div>
+                    <div class="certification-item">
+                        <h3>Dante Certification Level 1</h3>
+                        <div class="item-details">
+                            <ul>
+                                <li>Completed Dante Level 1 certification program.</li>
+                                <br>
+                                <li>Studied Dante audio networking technology fundamentals.</li>
+                                <br>
+                                <li>Learned to design, configure, and troubleshoot Dante networks.</li>
+                                <br>
+                                <li>Configured and troubleshooted Dante-enabled devices.</li>
+                                <br>
+                                <li>Completed practical labs to set up and manage Dante audio networks.</li>
+                                <br>
+                                <li>Participated in online forums and study groups to enhance understanding.</li>
+                                <br>
+                                <li>Stayed updated with the latest advancements in audio networking from Audinate.</li>
+                                <br>
+                                <li>Implemented Dante systems in real-world audio projects.</li>
+                            </ul>
+                            <a href="#" class="item-link" data-file="assets/Certificates/Dante Level 1 Certificate.pdf">Certification Link</a>
+                        </div>
+                    </div>
+                    <div class="certification-item">
+                        <h3>Information Technology Specialist in Cybersecurity</h3>
+                        <div class="item-details">
+                            <ul>
+                                <li>Obtained specialized certification in IT cybersecurity.</li>
+                                <br>
+                                <li>Studied advanced cybersecurity concepts and practices.</li>
+                                <br>
+                                <li>Developed skills in network security, threat analysis, and incident response.</li>
+                                <br>
+                                <li>Learned about security policies, risk management, and compliance.</li>
+                                <br>
+                                <li>Practiced implementing security measures and tools in IT environments.</li>
+                            </ul>
+                            <a href="#" class="item-link" data-file="assets/Certificates/Information Technology Specialist in Cybersecurity.pdf">Certification Link</a>
+                        </div>
+                    </div>
+                    <div class="certification-item">
+                        <h3>Q-Sys Level One Certified</h3>
+                        <div class="item-details">
+                            <ul>
+                                <li>Completed Q-Sys Level One certification program.</li>
+                                <br>
+                                <li>Gained proficiency in Q-Sys audio, video, and control platform.</li>
+                                <br>
+                                <li>Learned to design, configure, and troubleshoot Q-Sys systems.</li>
+                                <br>
+                                <li>Studied Q-Sys hardware components and software tools.</li>
+                                <br>
+                                <li>Practiced creating and deploying Q-Sys designs for various applications.</li>
+                            </ul>
+                            <a href="#" class="item-link" data-file="assets/Certificates/Q sys level one .pdf">Certification Link</a>
+                        </div>
+                    </div>
+                    <div class="certification-item">
+                        <h3>PwC US - Cyber Security Consulting Job Simulation</h3>
+                        <div class="item-details">
+                            <ul>
+                                <li>Completed PwC's cybersecurity consulting simulation program.</li>
+                                <br>
+                                <li>Gained insights into real-world cybersecurity consulting practices.</li>
+                                <br>
+                                <li>Participated in simulated client engagements and problem-solving scenarios.</li>
+                                <br>
+                                <li>Developed skills in risk assessment, threat analysis, and security strategy development.</li>
+                                <br>
+                                <li>Learned about industry best practices and regulatory compliance in cybersecurity.</li>
+                            </ul>
+                            <a href="#" class="item-link" data-file="assets/Certificates/PwC US Cyber Security Consulting Simulation.pdf">Certification Link</a>
+                        </div>
+                    </div>
+                    <div class="certification-item">
+                        <h3>Software Processes and Agile Practices</h3>
+                        <div class="item-details">
+                            <ul>
+                                <li>Enrolled in the "Software Processes and Agile Practices" course at the University of Alberta.</li>
+                                <br>
+                                <li>Studied various software development methodologies, including Agile, Scrum, and Extreme Programming (XP).</li>
+                                <br>
+                                <li>Explored the principles and practices of Agile software development, emphasizing iterative and incremental approaches.</li>
+                                <br>
+                                <li>Participated in lectures and group discussions to understand the concepts and techniques of Agile methodologies.</li>
+                                <br>
+                                <li>Applied Agile principles to real-world case studies and projects to gain practical experience in Agile project management.</li>
+                                <br>
+                                <li>Collaborated with classmates to plan, execute, and review Agile software development sprints using industry-standard tools.</li>
+                                <br>
+                                <li>Learned about software process improvement models, such as CMMI and ISO standards, to enhance software quality and productivity.</li>
+                                <br>
+                                <li>Explored techniques for managing requirements, estimating project timelines, and tracking progress in Agile environments.</li>
+                            </ul>
+                            <a href="#" class="item-link" data-file="assets/Certificates/Coursera Software Processes and Agile Practices.pdf">Certification Link</a>
+                        </div>
+                    </div>
+                </div>
+                <a href="docs/ciirts.html" class="view-all-certs">
+                    View All Certificates
+                    <span class="button-icon">→</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="section parallax" data-speed="0.1">
+            <div class="section-content">
+                <h2>Projects</h2>
+                <div class="grid-container">
+                    <div class="project-item">
+                        <h3>School Gym Audio System Project</h3>
+                        <div class="item-details">
+                            <ul>
+                                <li>Collaborated on enhancing the audio systems in the school gymnasium, improving audio quality and reliability for various events.</li>
+                                <br>
+                                <li>Addressed audio quality issues, sound distortion, and feedback problems by identifying and resolving root causes.</li>
+                                <br>
+                                <li>Optimized server rack layout and organization to enhance equipment accessibility and improve system reliability.</li>
+                                <br>
+                                <li>Troubleshooted audio equipment malfunctions, hardware failures, and software glitches.</li>
+                                <br>
+                                <li>Developed documentation and training materials for users and support staff.</li>
+                                <br>
+                                <li>Enhanced technical skills, problem-solving abilities, and practical knowledge in audio engineering.</li>
+                                <br>
+                                <li>Resolved compatibility issues between audio devices, peripherals, and control interfaces.</li>
+                                <br>
+                                <li>Collaborated with interdisciplinary teams to address multifaceted audio system challenges.</li>
+                                <br>
+                                <li>Enhanced user experience and satisfaction with the school gymnasium audio systems.</li>
+                                <br>
+                                <li>Improved system scalability, flexibility, and adaptability for future expansion and upgrades.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="project-item">
+                        <h3>Theater Shows - Technical & Marketing Team</h3>
+                        <div class="item-details">
+                            <ul>
+                                <li>Contributed to theater productions as a member of the technical and marketing team.</li>
+                                <br>
+                                <li>Collaborated on technical requirements, including sound, lighting, and backstage logistics.</li>
+                                <br>
+                                <li>Assisted in marketing and promoting theater shows through social media campaigns and poster distribution.</li>
+                                <br>
+                                <li>Operated sound and lighting equipment, managed backstage cues during performances.</li>
+                                <br>
+                                <li>Participated in set construction, stage design, and prop management activities.</li>
+                                <br>
+                                <li>Engaged with audience members to gather feedback and enhance the overall theater experience.</li>
+                                <br>
+                                <li>Developed teamwork and collaboration skills by working with diverse team members.</li>
+                            </ul>
+                            <a href="#" class="item-link" data-file="assets/Pictures/Shrek poster.jpg">Poster I Helped Make</a>
+                        </div>
+                    </div>
+                    <div class="project-item">
+                        <h3>Exploring the future implications and applications of Autonomous Cyber Defense</h3>
+                        <div class="item-details">
+                            <ul>
+                                <li>Conducted research on the future of autonomous cybersecurity systems.</li>
+                                <br>
+                                <li>Explored emerging trends and innovations in autonomous cyber defense.</li>
+                                <br>
+                                <li>Analyzed potential implications for cybersecurity strategies and practices.</li>
+                                <br>
+                                <li>Presented findings and insights to peers and professionals in the field.</li>
+                                <br>
+                                <li>Addressed the challenge of interpreting and explaining complex machine learning concepts to non-technical stakeholders.</li>
+                                <br>
+                                <li>Managed time constraints, project deadlines, and resource limitations effectively.</li>
+                            </ul>
+                            <a href="#" class="item-link" data-file="assets/Projects/Application of AI in CyberSecurity-CyberSafe.pdf">Presentation Link</a>
+                            <a href="#" class="item-link" data-file="assets/Pictures/Presenting_Picture.jpeg">Picture of Me Presenting</a>
+                        </div>
+                    </div>
+                    <div class="project-item">
+                        <h3>An Air Quality Predictor Model based on a KNN classifier</h3>
+                        <div class="item-details">
+                            <ul>
+                                <li>Developed a machine learning model for air quality prediction using KNN classifier.</li>
+                                <br>
+                                <li>Implemented data preprocessing, exploratory data analysis (EDA), and feature selection techniques.</li>
+                                <br>
+                                <li>Trained and evaluated the model's performance on air quality datasets.</li>
+                                <br>
+                                <li>Explored the application of machine learning in environmental monitoring.</li>
+                                <br>
+                                <li>Acquired practical skills in data science, including Python programming and use of data manipulation libraries.</li>
+                                <br>
+                                <li>Enhanced understanding of fundamental data science concepts, methodologies, and best practices.</li>
+                                <br>
+                                <li>Improved problem-solving, critical thinking, and analytical reasoning skills.</li>
+                                <br>
+                                <li>Cultivated teamwork, collaboration, and communication skills in a multidisciplinary team.</li>
+                            </ul>
+                            <a href="https://github.com/KanishkThamman/intel-project-air_polution_predictor-/tree/main" class="item-link" target="_blank">Project Repo Link</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- File Popup -->
+        <div id="filePopup" class="file-popup">
+            <div class="popup-content">
+                <span class="close-popup">&times;</span>
+                <iframe id="fileViewer" src="" frameborder="0"></iframe>
+            </div>
+        </div>
+
+
+
+        <div class="section">
+            <div class="section-content">
+                <h2>Skills</h2>
+                <ul class="skills-list">
+                    <li>Cybersecurity</li>
+                    <li>Artificial Intelligence (AI)</li>
+                    <li>Machine Learning</li>
+                    <li>Python</li>
+                    <li>Data Science</li>
+                    <li>Network Security</li>
+                    <li>Software Development</li>
+                    <li>UI/UX Design</li>
+                    <li>Project Management</li>
+                    <li>Agile Methodologies</li>
+                    <li>Roblox Development</li>
+                    <li>Teaching</li>
+                    <li>Problem Solving</li>
+                    <li>Critical Thinking</li>
+                    <li>Teamwork</li>
+                    <li>Communication</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    
+    
+</body>
+</html>
